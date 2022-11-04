@@ -5,32 +5,23 @@ import { Notification } from './Statistics/Notification';
 import { useState } from 'react';
 
 export const App = () => {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
-
-  const onLeaveFeedBack = e => {
-    const currentState = e.target.name;
-    switch (currentState) {
-      case 'good':
-        setGood(good + 1);
-        break;
-      case 'neutral':
-        setNeutral(neutral + 1);
-        break;
-      case 'bad':
-        setBad(bad + 1);
-        break;
-      default:
-        console.warn(`${currentState} не найден`);
-    }
+  const feedbackOptions = {
+    good: 0,
+    neutral: 0,
+    bad: 0,
   };
 
-  const countTotalFeedback = () => good + neutral + bad;
+  const [feedback, setFeedback] = useState(feedbackOptions);
+
+  const onLeaveFeedBack = e =>
+    setFeedback({ ...feedback, [e.target.name]: feedback[e.target.name] + 1 });
+
+  const countTotalFeedback = () =>
+    Object.values(feedback).reduce((a, b) => a + b, 0);
 
   const countPositiveFeedbackPercentage = () => {
-    if (good) {
-      return Math.floor((good / countTotalFeedback()) * 100);
+    if (feedback.good) {
+      return Math.floor((feedback.good / countTotalFeedback()) * 100);
     }
     return 0;
   };
@@ -39,7 +30,7 @@ export const App = () => {
     <div className="app">
       <Section title="Please leave feedback">
         <FeedbackOptions
-          options={{ good, neutral, bad }}
+          options={feedback}
           onLeaveFeedBack={e => onLeaveFeedBack(e)}
         />
       </Section>
@@ -48,9 +39,9 @@ export const App = () => {
           <Notification message="There is no feedback" />
         ) : (
           <Statistics
-            good={good}
-            neutral={neutral}
-            bad={bad}
+            good={feedback.good}
+            neutral={feedback.neutral}
+            bad={feedback.bad}
             total={countTotalFeedback()}
             positivePercentage={countPositiveFeedbackPercentage()}
           />
