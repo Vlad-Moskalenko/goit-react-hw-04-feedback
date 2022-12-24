@@ -1,0 +1,25 @@
+.optionsWrapper{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.optionBtn{
+  padding: 12px;
+
+  font-size: 18px;
+
+  text-transform: capitalize;
+  border-radius: 5px;
+  cursor: pointer;
+
+  transition: transform 250ms ease-in-out;
+}
+
+.optionBtn:active{
+  background-color: blue;
+}
+
+.optionBtn:hover{
+  transform: scale(1.1);
+}
